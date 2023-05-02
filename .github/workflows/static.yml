@@ -33,11 +33,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          # Upload entire repository
-          path: 'dist/'
+      - name: Tar files
+          run: tar -cvf dist.tar /dist
+      - name: Upload Artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: dist
+            path: dist.tar
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
