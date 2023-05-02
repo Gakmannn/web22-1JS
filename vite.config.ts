@@ -1,3 +1,3 @@
 export default {
-  base: 'web22-1JS'
+  base: '/web22-1JS/'
 }
