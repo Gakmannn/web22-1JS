@@ -35,7 +35,6 @@ jobs:
         uses: actions/configure-pages@v3
       - name: Tar files
           run: tar -cvf dist.tar /dist
-
       - name: Upload Artifact
           uses: actions/upload-artifact@v3
           with:
