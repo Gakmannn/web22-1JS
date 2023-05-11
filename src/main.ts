@@ -81,3 +81,56 @@ let func3 = (a: number, b: number) => {
 console.log('func1', func1(1,2))
 console.log('func2', func2(1,2))
 console.log('func3', func3(1,2))
+
+
+// ################### OBJECTS ######################
+let user
+user = new Object() // синтаксис "конструктор объекта"
+
+type User = {
+  age: number,
+  name: string
+}
+
+user = {} as any // синтаксис "литерал объекта"
+console.log({...user})
+user.age = 18
+console.log({...user})
+user.name = 'Vasya'
+console.log({...user})
+user.height = 180
+
+
+console.log(user.age)
+console.log({...user})
+
+const user1 = {
+  age: 18,
+  name: 'Vasya',
+  height: 180,
+  'master pass': '[admin}',
+} as any
+
+for (let key in user1) {
+  console.log(key, user1[key])
+}
+
+user1.age = 20
+console.log(user1['age'])
+let key = 'master pass'
+console.log(user1[key])
+delete user1['master pass']
+console.log(user1)
+
+let name = '123'
+let age = 20
+
+const user3 = {
+  name, 
+  age,
+}
+console.log(user3)
+
+// оператор «in» позволяет проверить, существует ли ключ в объекте
+console.log('age' in user3)
+console.log('tall' in user3)
