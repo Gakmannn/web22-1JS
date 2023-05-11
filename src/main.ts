@@ -43,6 +43,9 @@ function ask(question: string, yes: Function, no: Function) {
   if (confirm(question)) yes()
   else no();
 }
+ask
+
+
 // Анонимные функции-колбэки
 // ask(
 //   "Вы согласны?",
