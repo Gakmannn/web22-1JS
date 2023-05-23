@@ -87,10 +87,10 @@ console.log('func3', func3(1,2))
 let user
 user = new Object() // синтаксис "конструктор объекта"
 
-type User = {
-  age: number,
-  name: string
-}
+// type User = {
+//   age: number,
+//   name: string
+// }
 
 user = {} as any // синтаксис "литерал объекта"
 console.log({...user})
@@ -101,8 +101,8 @@ console.log({...user})
 user.height = 180
 
 
-console.log(user.age)
-console.log({...user})
+// console.log(user.age)
+// console.log({...user})
 
 const user1 = {
   age: 18,
@@ -111,26 +111,169 @@ const user1 = {
   'master pass': '[admin}',
 } as any
 
-for (let key in user1) {
-  console.log(key, user1[key])
-}
+user1.dfs = 152
+user1['master pass']
+
+// user1?.sdf
+// if (user1.sdf) {
+//   user1.sdf
+// }
+
+// for (let key in user1) {
+//   console.log(key, user1[key])
+// }
 
 user1.age = 20
-console.log(user1['age'])
-let key = 'master pass'
-console.log(user1[key])
+// console.log(user1['age'])
+// let key = 'master pass'
+// console.log(user1[key])
 delete user1['master pass']
-console.log(user1)
+// console.log(user1)
 
-let name = '123'
+let name = {n:'123'}
 let age = 20
 
 const user3 = {
-  name, 
+  name:name.n, 
   age,
 }
-console.log(user3)
+user3
+// console.log(user3)
 
 // оператор «in» позволяет проверить, существует ли ключ в объекте
-console.log('age' in user3)
-console.log('tall' in user3)
+// console.log('age' in user3)
+// console.log('tall' in user3)
+
+interface SpaceObject{
+  name: string
+  galaxy: string
+  weight: number
+  live?: boolean // свойство? - необязательное свойство
+}
+let obj2: SpaceObject = {
+  name: "Земля",
+  galaxy:"Milky Way",
+  weight: 1000000,
+}
+console.log(obj2.galaxy)
+
+// let obj: { name: string; age: number} = { name: "Vasja", age: 23}
+
+// console.log(obj.name)
+
+const obj = {
+  name: "Denis",
+  age: 23,
+  obj3: {
+    name: 'Alex',
+    age: 3,
+  },
+  arr: [1,1,2],
+  sayHi() {
+    console.log("Hello my name " + this.name + " My sun " + this.obj3.name)
+  },
+} as any
+
+obj.sayHi()
+
+let objCopy = {} as any
+// Четыре варианта копирования объектов
+// 1 Циклом вручную
+// for(let i in obj){
+//   objCopy[i] = obj[i]
+// }
+// 2 Spred оператор (разворачивание)
+objCopy = {...obj, arr2:[45], ...{arr:[45]}}
+// 3 Object.assign
+// Object.assign(objCopy,obj,{arr2:[45]})
+// 4 JSON (не копирует методы)
+// objCopy = JSON.parse(JSON.stringify(obj))
+objCopy.obj3.name = "Vasja"
+objCopy.sayHi()
+console.log(objCopy)
+console.log(obj.obj3.name)
+
+const obj4 = Object.assign({}, obj)
+
+obj4.obj3.name = "Petja"
+console.log(obj.obj3.name)
+
+const obj5 = {...obj}
+console.log(obj5)
+
+let JSONstr = JSON.stringify(obj)
+console.log(JSONstr)
+
+const obj6 = JSON.parse(JSON.stringify(obj))
+
+console.log(obj6)
+
+obj6.obj3.name = "Vika"
+console.log(obj.obj3.name)
+
+let codes = {
+  "49": "Германия",
+  "41": "Швейцария",
+  "44": "Великобритания",
+  "1": "США"
+}
+
+for (let i in codes) {
+  console.log(i)
+}
+
+Object.keys(obj) //– возвращает массив ключей.
+Object.values(obj) //– возвращает массив значений.
+Object.entries(obj) //– возвращает массив пар [ключ, значение].
+
+
+let id = Symbol("id");
+
+let user5 = {
+  name: "Вася",
+  [id]: 123 // просто "id: 123" не сработает
+}
+user5
+let num = 12.346
+num
+//var num2 = '3';
+let num2 = Number("66")
+let num3 = Number(6) + Number(6)
+console.log(typeof(num2))
+console.log(num3)
+let num4: number = 6
+let num5: number = 6
+let num6 = num4+num5
+console.log(num6)
+console.log(Math.random())
+Math.max(3, 5, -10, 0, 1)
+
+console.log('Тут')
+
+// let a = prompt('Введите число a')
+// let b = prompt('Введите число b')
+// let choi = prompt('Введите + - / *')
+// let c = 0
+// switch (choi) {
+//   case '+':
+//     c = Number(a) + Number(b)
+//     console.log(c)
+//     break;
+//   case '-':
+//     c = Number(a) - Number(b)
+//     console.log(c)
+//     break;
+//   case '*':
+//     c = Number(a) * Number(b)
+//     console.log(c)
+//     break;
+//   case '/':
+//     c = Number(a) / Number(b)
+//     console.log(c)
+//     break;
+// }
+  
+let str = "stringify";
+str
+// str.trim()// — убирает пробелы в начале и конце строки.
+// str.repeat()// — повторяет строку n раз.
