@@ -178,16 +178,18 @@ obj.sayHi()
 
 let objCopy = {} as any
 // Четыре варианта копирования объектов
-// 1 Циклом вручную
+// 1 Циклом вручную. Подходит для плоских объектов (без вложенных объектов)
 // for(let i in obj){
 //   objCopy[i] = obj[i]
 // }
 // 2 Spred оператор (разворачивание)
-objCopy = {...obj, arr2:[45], ...{arr:[45]}}
+objCopy = { ...obj, arr2: [45], ...{ arr: [45] }, obj3: {...obj.obj3} } // Подходит для плоских объектов (без вложенных объектов)
 // 3 Object.assign
-// Object.assign(objCopy,obj,{arr2:[45]})
-// 4 JSON (не копирует методы)
+// Object.assign(objCopy,obj,{arr2:[45]}) // Подходит для плоских объектов (без вложенных объектов)
+// 4 JSON (не копирует методы, но копирует вложенные объекты)
 // objCopy = JSON.parse(JSON.stringify(obj))
+// 5 structuredClone() (При копировании метода вызывается ошибка, копирует вложенные объекты)
+// objCopy = structuredClone(obj)
 objCopy.obj3.name = "Vasja"
 objCopy.sayHi()
 console.log(objCopy)
@@ -277,3 +279,76 @@ let str = "stringify";
 str
 // str.trim()// — убирает пробелы в начале и конце строки.
 // str.repeat()// — повторяет строку n раз.
+
+// console.log('{}=={}', {}=={}) false
+// Никогда не будет равно, т.к. оба пустые объекта ссылаются на разные ячейки памяти
+const cell = {} as any
+const cell2 = cell
+console.log('cell==cell2', cell == cell2)
+cell2.name = 'Aaaaaaaa'
+console.log('cell', cell)
+
+codes = {
+  "49": "Германия",
+  "41": "Швейцария",
+  "44": "Великобритания",
+  // ..,
+  "1": "США"
+};
+
+for (let code in codes) {
+  console.log(code); // 1, 41, 44, 49
+}
+
+// Напишите код, выполнив задание из каждого пункта отдельной строкой:
+
+// Создайте пустой объект newUser.
+// Добавьте свойство name со значением John.
+// Добавьте свойство surname со значением Smith.
+// Измените значение свойства name на Pete.
+// Удалите свойство name из объекта.
+const newUser = {} as any
+newUser.name = 'John'
+newUser.surname = 'Smith'
+newUser.name = 'Pete'
+delete newUser.name
+
+// Напишите функцию isEmpty(obj), которая возвращает true, если у объекта нет свойств, иначе false.
+
+const emptyObj = {}
+const notEmptyObj = {a:1}
+
+function isEmpty(obj:Record<string,any>) {
+  // 1
+  // for (let key in obj) {
+  //   return false
+  // }
+  // return true
+  // 2
+  // return JSON.stringify(obj)=='{}' ? true : false
+  // 3
+  return Object.keys(obj).length ? false : true
+}
+
+console.log(isEmpty(emptyObj))
+console.log(isEmpty(notEmptyObj))
+
+// У нас есть объект, в котором хранятся зарплаты нашей команды:
+
+// Напишите код для суммирования всех зарплат и сохраните результат в переменной sum.Должно получиться 390.
+
+// Если объект salaries пуст, то результат должен быть 0.
+
+const salaries = {
+  John: 100,
+  Ann: '160$',
+  Pete: 130
+} as Record<string, any>
+
+let sum = 0
+for (let key in salaries) {
+  sum += parseFloat(salaries[key])
+  if (typeof(salaries[key]) == 'number') salaries[key] *= 2
+}
+console.log(sum)
+console.log(salaries)

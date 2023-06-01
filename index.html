@@ -5,17 +5,59 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
+    <style>
+      a {
+        font-size: 30px;
+        display: block;
+        width: 200px;
+        border-radius: 10px;
+        background-color: burlywood;
+        border: 1px solid black;
+        text-align: center;
+        padding: 10px;
+        margin: 20px auto;
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <a href="https://disk.yandex.ru/d/KwdXQropyuL3Iw" target="_blank">Материалы</a>
+      <a href="https://disk.yandex.ru/d/KwdXQropyuL3Iw" target="_blank">Материалы и домашка!!!</a>
       dvdfgdfg
       dfgdfgdfg
       vffdfs
       Andrey
       sdfsdf
       <lite-youtube videoid="9NcPcb1oPIE" playlabel="Play: Keynote (Google I/O '18)"></lite-youtube>
+      <p>размеры прямоугольника</p>
+      <input type="text" id="width" placeholder="длина">
+      <input type="text" id="height" placeholder="высота">
+      <button id="save">сохранить</button>
     </div>
     <script type="module" src="/src/main.ts"></script>
+    <script>
+      const width = document.querySelector('#width')
+      const height = document.querySelector('#height')
+      const save = document.querySelector('#save')
+
+      // sessionStorage - хранилище сессии (стирается после закрытия вкладки, не доступен надругой вкладке)
+      // localStorage - локальное хранилище (не стирается)
+      width.value = localStorage.width?localStorage.width:''
+      height.value = localStorage.height?localStorage.height:''
+
+      save.addEventListener('click', ()=>{
+        localStorage.width = width.value
+        localStorage.height = height.value
+      })
+      
+      localStorage.arr = JSON.stringify([0,1,2])
+      console.log(JSON.parse(localStorage.arr))
+      
+      localStorage.obj = JSON.stringify({
+        name: 'Andrey'
+      })
+      console.log(JSON.parse(localStorage.obj))
+
+    </script>
   </body>
 </html>
