@@ -568,3 +568,119 @@ console.log('aaaa'.localeCompare('aazaaa'))
 
 console.log('    Niko     '.trim())
 console.log('Fffff'.repeat(3))
+
+// ############# Массивы ############# 
+
+// Два варианта создания массива
+let arr = new Array()
+arr = []
+
+// Практически всегда используется второй вариант синтаксиса.В скобках мы можем указать начальные значения элементов:
+
+let fruits = ["Яблоко", "Апельсин", "Слива"];
+// Элементы массива нумеруются, начиная с нуля.
+
+// Мы можем получить элемент, указав его номер в квадратных скобках:
+
+fruits = ["Яблоко", "Апельсин", "Слива"]
+
+console.log(fruits[0]) // Яблоко
+console.log(fruits[1]) // Апельсин
+console.log(fruits[2]) // Слива
+
+// Мы можем заменить элемент:
+
+fruits[2] = 'Груша' // теперь ["Яблоко", "Апельсин", "Груша"]
+// …Или добавить новый к существующему массиву:
+
+fruits[3] = 'Лимон' // теперь ["Яблоко", "Апельсин", "Груша", "Лимон"]
+// Общее число элементов массива содержится в его свойстве length:
+
+fruits = ["Яблоко", "Апельсин", "Слива"]
+
+fruits[1] = fruits[1].slice(0, 4) + fruits[1][4].toUpperCase() + fruits[1].slice(5) + ', яблоко'
+console.log(fruits[1])
+
+console.log(fruits.length) // 3
+
+console.log(fruits)
+console.log(fruits.toString())
+
+fruits = [
+  "Апельсин",
+  "Слива",
+  "Яблоко", // висячая запятая
+]
+// «Висячая запятая» упрощает процесс добавления/удаления элементов, так как все строки становятся идентичными.
+
+
+// получить последний элемент массива, динамической длины
+console.log(fruits[fruits.length-1])
+console.log(fruits.at(-1))
+
+// Методы pop/push, shift/unshift
+
+let newLenth = fruits.push('Груша') // Добавляет элемент в конец массива, возвращает новую длину масиива
+console.log("fruits.push('Груша')", fruits, 'newLenth', newLenth)
+
+let lastElement = fruits.pop() // Убирает последний элемент массива и возвращает его значение
+console.log('lastElement = fruits.pop()', fruits, 'lastElement', lastElement)
+
+newLenth = fruits.unshift('Груша') // Добавляет элемент в начало массива, возвращает новую длину масиива
+console.log("fruits.unshift('Груша')", fruits, 'newLenth', newLenth)
+
+let firstElement = fruits.shift() // Убирает первый элемент массива и возвращает его значение
+console.log('lastElement = fruits.shift()', fruits, 'firstElement', firstElement)
+
+const newFruits = fruits
+newFruits.push('Алыча')
+console.log('fruits', fruits)
+console.log('newFruits', newFruits)
+// Массивы хранят значения по ссылке как и объекты, т.к. их прототип - простой объект
+// @ts-ignore
+console.log('[]==[]', []==[])
+
+// Движок JavaScript старается хранить элементы массива в непрерывной области памяти, один за другим. Это очень большой плюс массивов
+// Но массивы утратят эффективность, если мы перестанем работать с массивом как с «упорядоченной коллекцией данных» и начнём использовать его как обычный объект
+
+// Варианты неправильного применения массива:
+
+// Добавление нечислового свойства, например: arr.test = 5.
+// Создание «дыр», например: добавление arr[0], затем arr[1000](между ними ничего нет).
+// Заполнение массива в обратном порядке, например: arr[1000], arr[999] и т.д.
+
+// Массив следует считать особой структурой, позволяющей работать с упорядоченными данными.Для этого массивы предоставляют специальные методы.Массивы тщательно настроены в движках JavaScript для работы с однотипными упорядоченными данными, поэтому, пожалуйста, используйте их именно в таких случаях.Если вам нужны произвольные ключи, вполне возможно, лучше подойдёт обычный объект { }.
+
+// Способы очистки 
+const myArray = ['erter','sdfsd','fghfg']
+// myArray = [] Нельзя для константы, можно для переменной (let)
+myArray.length = 0
+console.log(myArray)
+
+// Методы push/pop выполняются быстро, а методы shift/unshift – медленно.
+
+// как выглядит примерная реализация методов push и pop
+function push(arr: any, el:any) {
+  arr[arr.length] = el
+  return arr.length
+}
+
+function pop(arr: any) {
+  const el = arr[arr.length-1]
+  arr.length = arr.length - 1
+  return el
+}
+
+// как выглядит примерная реализация методов unshift и shift
+function unshift(arr: any, el:any) {
+  const newArr = [el, ...arr]
+  return newArr.length
+}
+
+function shift(arr: any) {
+  const el = arr[0]
+  arr.slice(1)
+  return el
+}
+
+// Остановились на переборе элементов
