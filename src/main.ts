@@ -654,6 +654,7 @@ console.log('[]==[]', []==[])
 // Способы очистки 
 const myArray = ['erter','sdfsd','fghfg']
 // myArray = [] Нельзя для константы, можно для переменной (let)
+// Самый просстой способ очистить массив
 myArray.length = 0
 console.log(myArray)
 
@@ -684,3 +685,295 @@ function shift(arr: any) {
 }
 
 // Остановились на переборе элементов
+
+// 3 варианта перебора элементов массива
+
+arr = ["Яблоко", "Апельсин", "Груша"]
+
+console.log('### Классический цикл for, если нужны индексы ###')
+for (
+  let i = 0; 
+  i < arr.length; 
+  i++
+  ) {
+  console.log('arr['+i+']', arr[i])
+}
+
+// Проходит по значениям
+// Цикл for..of не предоставляет доступа к номеру текущего элемента, только к его значению, но в большинстве случаев этого достаточно.А также это короче.
+console.log('### Цикл for .. of, если нужны только значения ###')
+for (let fruit of fruits) {
+  console.log('fruit', fruit)
+}
+
+// Технически, так как массив является объектом, можно использовать и вариант for..in:
+console.log('### Цикл for .. in. !!!!Не использовать для массивов!!! ###')
+// arr.name = 'массив фруктов'
+for (let key in arr) {
+  console.log('arr['+key+']', arr[key])
+}
+
+// Но на самом деле это – плохая идея.Существуют скрытые недостатки этого способа:
+
+// Цикл for..in выполняет перебор всех свойств объекта, а не только цифровых.
+
+// В браузере и других программных средах также существуют так называемые «псевдомассивы» – объекты, которые выглядят, как массив.То есть, у них есть свойство length и индексы, но они также могут иметь дополнительные нечисловые свойства и методы, которые нам обычно не нужны.Тем не менее, цикл for..in выведет и их.Поэтому, если нам приходится иметь дело с объектами, похожими на массив, такие «лишние» свойства могут стать проблемой.
+
+// Цикл for..in оптимизирован под произвольные объекты, не массивы, и поэтому в 10 - 100 раз медленнее.Увеличение скорости выполнения может иметь значение только при возникновении узких мест.Но мы всё же должны представлять разницу.
+
+// !!!НЕ СЛЕДУЕТ использовать цикл for..in для массивов.
+// ### for..in используется ТОЛЬКО ДЛЯ обхода ключей (значений) ОБЪЕКТОВ ###
+
+// Сравнение масиивов с ПРИМИТИВАМИ
+
+const arrA = [0,1,52,5,{a:0}]
+const arrB = [0,1,52,5,{c:11}]
+
+// !!!НЕ ПОДХОДИТ ДЛЯ СРАВНЕНИЯ МАССИВОВ С ОБЪЕКТАМИ, Т.К. ЛЮБОЙ ОБЪЕКТ ПРЕОБРАЗУЕТСЯ В [object Object]
+
+console.log('arrA==arrB', arrA == arrB) // false, т.к. объекты сравниваются по ссылке
+console.log('arrA.toString()==arrB.toString()', arrA.toString() == arrB.toString()) // true
+
+// Самы простой способ сделать массив, значения которого примитивы, или массивы примитивов, плоским: 
+
+console.log('[1,2,3,[4,5,6,[7,8,9]]].toString().split(\',\')', [1, 2, 3, [4, 5, 6, [7, 8, 9]]].toString().split(','))
+
+// Так как же сравнить массивы ?
+
+// Это просто: не используйте оператор ==.Вместо этого сравните их по элементам в цикле или используя методы итерации, которые рассмотрим позже.
+
+// ###### Многомерные массивы ######
+// Массивы могут содержать элементы, которые тоже являются массивами.Это можно использовать для создания многомерных массивов, например, для хранения матриц:
+
+let matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+
+console.log(matrix[1][1]); // 5, центральный элемент
+
+// Написать функцию, которая принимает двузначное число 
+// и возвращает его в текстовом виде.
+// Например: 35 – тридцать пять, 89 – восемьдесят девять, 12 – двенадцать.
+
+function oneNumber(n:number) {
+  switch (n) {
+    case 0:
+      return 'ноль'
+    case 1:
+      return 'один'
+    case 2:
+      return 'два'
+    case 3:
+      return 'три'
+    case 4:
+      return 'четыре'
+    case 5:
+      return 'пять'
+    case 6:
+      return 'шесть'
+    case 7:
+      return 'семь'
+    case 8:
+      return 'восемь'
+    case 9:
+      return 'девять'
+  }
+}
+
+function secondOfTen(n:number) {
+  switch (n) {
+    case 0:
+      return 'десять'
+    case 1:
+      return 'одиннадцать'
+    case 2:
+      return 'двенадцать'
+    case 3:
+      return 'тринадцать'
+    case 4:
+      return 'четырнадцать'
+    case 5:
+      return 'пятьнадцать'
+    case 6:
+      return 'шестьнадцать'
+    case 7:
+      return 'семьнадцать'
+    case 8:
+      return 'восемьнадцать'
+    case 9:
+      return 'девятьнадцать'
+  }
+}
+
+function firstOfMoreTen(n:number) {
+  switch (n) {
+    case 2:
+      return 'двадцать'
+    case 3:
+      return 'тридцать'
+    case 4:
+      return 'сорок'
+    case 5:
+      return 'пятьдесят'
+    case 6:
+      return 'шестьдесят'
+    case 7:
+      return 'семьдесят'
+    case 8:
+      return 'восемьдесят'
+    case 9:
+      return 'девяносто'
+  }
+}
+
+function numberToText(n:number) {
+  if (n<-99 || n>99) return 'Неверное число'
+  let minusStr = ''
+  let sN = ''
+  const numberWithMinus = n.toString()
+  if (numberWithMinus[0]=='-') {
+    minusStr = 'минус '
+    sN = numberWithMinus.slice(1)
+  } else {
+    sN = n.toString()
+  }
+  
+  if (sN.length==1) {
+    return minusStr + oneNumber(+sN[0])
+  }
+  if (sN.length == 2) {
+    if (sN[0]=='1') {
+      return minusStr + secondOfTen(+sN[1])
+    }
+    if (sN[1]=='0') {
+      return minusStr + firstOfMoreTen(+sN[0])
+    }
+    return minusStr + firstOfMoreTen(+sN[0]) + ' ' + oneNumber(+sN[1])
+  }
+}
+
+alert(numberToText(+(prompt('введите двузначное число') as string)))
+
+console.log(numberToText(18))
+console.log(numberToText(0))
+console.log(numberToText(9))
+console.log(numberToText(34))
+console.log(numberToText(68))
+
+// Задача 3
+// Создать массив css-стилей (цвет, размер шрифта, выравнивание, подчеркивание и т.д.). Каждый элемент массива – это объект, состоящий из двух свойств: название стиля и значение стиля.
+// Написать функцию, которая принимает массив стилей и текст, и выводит этот текст с помощью document.write() в тегах <p> </p>, добавив в открывающий тег атрибут style со всеми стилями, перечисленными в массиве.
+
+const colorRed = [
+  {
+    name: 'color',
+    value: 'red'
+  },
+  {
+    name: 'text-decoration',
+    value: 'underline'
+  },
+]
+const colorGreen = [
+  {
+    name: 'color',
+    value: 'green'
+  },
+  {
+    name: 'font-size',
+    value: '20px'
+  },
+]
+
+const printTextDiv = document.querySelector('.printText')
+
+function printText(styleArr:Record<string,string>[],text:string) {
+  let styleStr = ''
+  for (let el of styleArr) {
+    styleStr += `${el.name}:${el.value};`
+  }
+  if (printTextDiv) {
+    printTextDiv.innerHTML += `<p style="${styleStr}">${text}</p>`
+  }
+}
+
+printText(colorRed, 'dfjkghjkdfgjhkdfgjkndfjkgnjkn sfgmlkdfnjglknjdflk')
+printText(colorGreen, 'dfjkghjkdfgjhkdfgjkndfjkgnjkn sfgmlkdfnjglknjdflk')
+
+// Задача 1
+// Создать массив «Список покупок». Каждый элемент массива является объектом, который содержит название продукта, необходимое количество и куплен или нет.Написать несколько функций для работы с таким массивом.
+// 1 Вывод всего списка на экран таким образом, чтобы сначала шли некупленные продукты, а потом – купленные.
+// 2 Добавление покупки в список.Учтите, что при добавлении покупки с уже существующим в списке продуктом, необходимо увеличивать количество в существующей покупке, а не добавлять новую.
+// 3 Покупка продукта.Функция принимает название продукта и отмечает его как купленный.
+
+const purchase = [
+  {
+    name: 'a',
+    count: 12,
+    purchased: true,
+  },
+  {
+    name: 'b',
+    count: 6,
+    purchased: false,
+  },
+  {
+    name: 'c',
+    count: 1,
+    purchased: true,
+  },
+]
+
+const addPurchaseButton = document.querySelector('.addPurchase')
+const setPurchasedButton = document.querySelector('.setPurchased')
+
+function whatToBuy(arr:any[]) {
+  let n = 1
+  for (let el of arr) {
+    if (!el.purchased) {
+      console.log(`${n}. ${el.name} Надо купить ${el.count} штук`)
+      n++
+      // console.log(n + ". " +el.name+" Надо купить "+el.cont+"штук")
+    }
+  }
+  for (let el of arr) {
+    if (el.purchased) {
+      console.log(`${n}. ${el.name} Куплено ${el.count} штук`)
+      n++
+      // console.log(n + ". " +el.name+" Надо купить "+el.cont+"штук")
+    }
+  }
+}
+
+function addPurchase() {
+  const name = prompt('Введите название') as string
+  const count = +(prompt('Введите количество') as string)
+  let find = false
+  for (let el of purchase) {
+    if (el.name == name) {
+      el.count += count
+      find = true
+    }
+  }
+  if (!find) {
+    purchase.push({ name:name, count, purchased: false })
+  }
+  whatToBuy(purchase)
+}
+
+function setPurchased() {
+  const name = prompt('Введите название купленного товара') as string
+  for (let el of purchase) {
+    if (el.name == name) {
+      el.purchased = true
+    }
+  }
+  whatToBuy(purchase)
+}
+
+addPurchaseButton?.addEventListener('click', addPurchase)
+setPurchasedButton?.addEventListener('click', setPurchased)
+
+whatToBuy(purchase)
