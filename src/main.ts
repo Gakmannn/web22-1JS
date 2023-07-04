@@ -1327,7 +1327,7 @@ arr = []
 
 // Error: Reduce of empty array with no initial value
 // если бы существовало начальное значение, reduce вернул бы его для пустого массива.
-arr.reduce((sum, current) => sum + current)
+// arr.reduce((sum, current) => sum + current)
 // Поэтому рекомендуется всегда указывать начальное значение.
 // Метод arr.reduceRight работает аналогично, но проходит по массиву справа налево.
 
@@ -1375,9 +1375,9 @@ let users = [
 // найти пользователей, для которых army.canJoin возвращает true
 let soldiers = users.filter(army.canJoin, army);
 
-alert(soldiers.length); // 2
-alert(soldiers[0].age); // 20
-alert(soldiers[1].age); // 23
+console.log(soldiers.length); // 2
+console.log(soldiers[0].age); // 20
+console.log(soldiers[1].age); // 23
 
 // Если бы мы в примере выше использовали просто users.filter(army.canJoin), то вызов army.canJoin был бы в режиме отдельной функции, с this = undefined.Это тут же привело бы к ошибке.
 
@@ -1447,3 +1447,23 @@ console.log(arraysEqual([1, 2], [1, 2])); // true
 // Внимательно изучите шпаргалку, представленную выше, а затем, чтобы попрактиковаться, решите задачи, предложенные в данной главе.Так вы получите необходимый опыт в правильном использовании методов массива.
 
 // Всякий раз, когда вам будет необходимо что - то сделать с массивом, а вы не знаете, как это сделать – приходите сюда, смотрите на таблицу и ищите правильный метод.Примеры помогут вам всё сделать правильно, и вскоре вы быстро запомните методы без особых усилий.
+
+// ############ this и цепочка вызовов ###########
+let ladder = {
+  step: 0,
+  up() {
+    this.step++
+    return this
+  },
+  down() {
+    this.step--
+    return this
+  },
+  showStep: function () { // показывает текущую ступеньку
+    console.log(this.step)
+    return this
+  }
+}
+ladder.up().up().down().showStep().down().showStep()
+
+console.log(parseInt('sdfsdf'.split('s').join('67').toUpperCase()).toFixed(2))
