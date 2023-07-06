@@ -1467,3 +1467,80 @@ let ladder = {
 ladder.up().up().down().showStep().down().showStep()
 
 console.log(parseInt('sdfsdf'.split('s').join('67').toUpperCase()).toFixed(2))
+
+function pow(x: number, n: number):number {
+  console.log('x',x,'n',n)
+  if (n == 1) {
+    return x
+  } else {
+    return x * pow(x, n - 1)
+    // return 2 * pow(2, 3 - 1) => return 2 * 2 * pow(2, 2 - 1) => return 2 * 2 * 2
+    // 2**3 = 2 * 2**(3-1)
+    // 2**3 = 2 * 2 * 2**(2-1)
+    // 2**3 = 2 * 2 * 2
+  }
+}
+
+// короткая версия записи
+function pow2(x: number, n: number): number {
+  return (n == 1) ? x : (x * pow(x, n - 1));
+}
+
+// Максимальная глубина рекурсии ограничена движком JavaScript.Точно можно рассчитывать на 10000
+// Рекурсия широко распространена: для решения большого числа задач рекурсивный способ решения даёт более простой код, который легче поддерживать
+console.log(pow(2, 3))
+
+function fib(n:number) {
+  let a = 1
+  let b = 1
+  for (let i = 3; i <= n; i++) {
+    let c = a + b
+    a = b
+    b = c
+  }
+  return b
+}
+
+function cachedFibonache() {
+  const fibMemory:any = {}
+  return function(n:number) {
+    if (n <= 1) {
+      console.log(fibMemory)
+      return n  
+    } else {
+      if (!fibMemory[n]) {
+        fibMemory[n] = recursiveFib(n - 1) + recursiveFib(n - 2)
+      }
+      return fibMemory[n]
+    } 
+  }
+}
+
+const recursiveFib = cachedFibonache()
+const recursiveFib2 = cachedFibonache()
+
+console.log(fib(3)) // 2
+console.log(fib(7)) // 13
+console.log(fib(77)) // 5527939700884757
+console.log(recursiveFib2(3))
+console.log(recursiveFib(77))
+
+const click1Btn = document.querySelector('.click1')
+const click2Btn = document.querySelector('.click2')
+
+function cachedClicker() {
+  let memory = 0
+  return function() {
+    return memory ++
+  }
+}
+
+const click1fn = cachedClicker()
+click1Btn?.addEventListener('click', ()=>{
+  if (click1Btn) click1Btn.innerHTML = String(click1fn())
+})
+const click2fn = cachedClicker()
+click2Btn?.addEventListener('click', ()=>{
+  if (click2Btn) click2Btn.innerHTML = String(click2fn())
+})
+
