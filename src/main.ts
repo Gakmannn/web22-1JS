@@ -1542,5 +1542,14 @@ click1Btn?.addEventListener('click', ()=>{
 const click2fn = cachedClicker()
 click2Btn?.addEventListener('click', ()=>{
   if (click2Btn) click2Btn.innerHTML = String(click2fn())
-})
+});
 
+[0, 1, 2].forEach((el, i, arr)=>console.log(el,i,arr))
+
+function forEach(arr:any[], callback:Function) {
+  for (let i=0; i<arr.length; i++) {
+    callback(arr[i],i,arr)
+  }
+}
+
+forEach([0, 1, 2], (el:any, i:number, arr:any[]) => console.log(el, i, arr))
