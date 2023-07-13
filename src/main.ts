@@ -1542,9 +1542,9 @@ click1Btn?.addEventListener('click', ()=>{
 const click2fn = cachedClicker()
 click2Btn?.addEventListener('click', ()=>{
   if (click2Btn) click2Btn.innerHTML = String(click2fn())
-});
+})
 
-[0, 1, 2].forEach((el, i, arr)=>console.log(el,i,arr))
+;[0, 1, 2].forEach((el, i, arr)=>console.log(el,i,arr))
 
 function forEach(arr:any[], callback:Function) {
   for (let i=0; i<arr.length; i++) {
@@ -1553,3 +1553,41 @@ function forEach(arr:any[], callback:Function) {
 }
 
 forEach([0, 1, 2], (el:any, i:number, arr:any[]) => console.log(el, i, arr))
+
+user = {
+  name: 'Andrey',
+  isAdmin: true,
+  sayHi() {
+    console.log('My name is '+ this.name + ' and i\'m is ' + this.isAdmin? 'admin' : 'not admin' )
+  }
+} 
+let user2 = {
+  name: 'Andrey',
+  isAdmin: true,
+  sayHi() {
+    console.log('My name is '+ this.name)
+  }
+} 
+
+// localStorage.user = JSON.stringify(user)
+// console.log(JSON.parse(localStorage.user))
+console.log(user)
+console.log(user2)
+
+const User = (function(this:any, name:string, isAdmin:boolean=false) {
+  // this = {};  (неявно)
+
+  // добавляет свойства к this
+  this.name = name
+  this.isAdmin = isAdmin
+  this.sayHi = function() {
+    console.log('My name is ' + this.name + ' and i\'m is ' + this.isAdmin ? 'admin' : 'not admin')
+  }
+  // return this;  (неявно)
+}) as any
+
+user = new User("Jack")
+user2 = new User("Jack2", true)
+console.log(user)
+console.log(user2)
+
