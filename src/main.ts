@@ -1591,3 +1591,143 @@ user2 = new User("Jack2", true)
 console.log(user)
 console.log(user2)
 
+declare global {
+  interface String {
+    reverse(): string;
+  }
+}
+
+// ?############# Описание объектов, методов JSDoc ##############
+// https://jsdoc.app/index.html
+
+/**
+ * @method
+ * Тут можем создать описание функции
+ *
+ * @param {string} this - так описываются параметры. Т.к. это метод, опишем только this, который передавать не нужно
+ */
+String.prototype.reverse = function (this: string) {
+  return this.split('').reverse().join('')
+}
+console.log('sffgdfgdfg'.reverse())
+
+/**
+ * Объект с числом и методом
+ */
+const myObj = {
+  /**
+   * @argument
+   * Просто число
+   */
+  a:10,
+  /**
+   * @method
+   * Увеличивает a на 1
+   */
+  count() {
+    this.a++
+  }
+}
+
+myObj.count()
+myObj.a
+console.log(myObj)
+
+// ?############# Prototypes ################
+
+// Прототип даёт нам немного «магии». Когда мы хотим прочитать свойство из object, а оно отсутствует, JavaScript автоматически берёт его из прототипа. В программировании такой механизм называется «прототипным наследованием». Многие интересные возможности языка и техники программирования основываются на нём
+
+const animal = {
+  eats: true,
+  sound: null,
+  hunger: null,
+  move() {
+    console.log('top-top')
+  },
+  makeSound() {
+    console.log(this.sound)
+  },
+  eat() {
+    this.hunger = false
+  },
+  sleep() {
+    this.hunger = true
+  },
+} as any
+
+const fury = {
+  soft: 'very',
+  __proto__: animal,
+} as any
+
+const rabbit = {
+  jumps: true,
+  eats: 'carrot',
+} as any
+
+// fury.__proto__ = animal
+rabbit.__proto__ = fury
+// Цикличное прототипное наследование приводит к ошибке
+// animal.__proto__ = rabbit
+console.log('rabbit', rabbit)
+rabbit.eats = 'carrot'
+console.log('animal.eats', animal.eats)
+console.log('rabbit.eats', rabbit.eats)
+console.log('rabbit.soft', rabbit.soft)
+console.log('rabbit.move()')
+rabbit.move()
+rabbit.move = ()=>{
+  console.log('jump-jump')
+}
+console.log('rabbit.move()')
+rabbit.move()
+// ?Неважно, где находится метод: в объекте или его прототипе. При вызове метода this — всегда объект перед точкой
+// sound берётся из animal
+console.log('rabbit.makeSound()') 
+rabbit.makeSound()
+rabbit.sound = 'fr-fr'
+// sound берётся из rabbit
+console.log('rabbit.makeSound()')
+rabbit.makeSound()
+console.log('rabbit', rabbit)
+console.log('rabbit.sleep()')
+rabbit.sleep()
+console.log('rabbit', rabbit)
+console.log('rabbit.eat()')
+rabbit.eat()
+console.log('rabbit', rabbit)
+console.log('animal', animal)
+
+
+user = {
+  name: "John",
+  surname: "Smith",
+  // Метод-Сеттер устанавливает значение свойства fullName. Срабатывает при присваивании
+  set fullName(value) {
+    this.name = value.split(" ")[0]
+    this.surname = value.split(" ")[1]
+    // ;[this.name, this.surname] = value.split(" ")
+  },
+  // Метод-Геттер возвращает значение свойства fullName. Срабатывает обращении
+  get fullName() {
+    return `${this.name} ${this.surname}`
+  },
+}
+
+let admin = {
+  __proto__: user,
+  isAdmin: true
+} as any
+
+console.log(admin.fullName) // Сработал Геттер
+console.log(admin)
+
+console.log(user.isPrototypeOf(admin))
+
+// срабатывает сеттер!
+admin.fullName = "Alice Cooper Js" // Сработал Сеттер
+console.log(admin.name)     // Alice
+console.log(admin.surname)  // Cooper
+
+console.log(admin)
+console.log('Object.keys(admin)', Object.keys(admin))
