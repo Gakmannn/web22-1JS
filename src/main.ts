@@ -1669,7 +1669,7 @@ const rabbit = {
 rabbit.__proto__ = fury
 // Цикличное прототипное наследование приводит к ошибке
 // animal.__proto__ = rabbit
-console.log('rabbit', rabbit)
+console.log('rabbit', { ...rabbit, __proto__: fury })
 rabbit.eats = 'carrot'
 console.log('animal.eats', animal.eats)
 console.log('rabbit.eats', rabbit.eats)
@@ -1689,13 +1689,13 @@ rabbit.sound = 'fr-fr'
 // sound берётся из rabbit
 console.log('rabbit.makeSound()')
 rabbit.makeSound()
-console.log('rabbit', rabbit)
+console.log('rabbit', { ...rabbit, __proto__: fury })
 console.log('rabbit.sleep()')
 rabbit.sleep()
-console.log('rabbit', rabbit)
+console.log('rabbit', { ...rabbit, __proto__: fury })
 console.log('rabbit.eat()')
 rabbit.eat()
-console.log('rabbit', rabbit)
+console.log('rabbit', { ...rabbit, __proto__: fury })
 console.log('animal', animal)
 
 
@@ -1730,4 +1730,117 @@ console.log(admin.name)     // Alice
 console.log(admin.surname)  // Cooper
 
 console.log(admin)
+console.log(user)
 console.log('Object.keys(admin)', Object.keys(admin))
+
+// Цикл for…in
+// Цикл for..in проходит не только по собственным, но и по унаследованным свойствам объекта.
+
+for (let prop in admin) console.log(prop)
+
+console.log('Object.keys(rabbit)', Object.keys(rabbit))
+
+// rabbit.pinkNose = true
+
+Object.defineProperty(rabbit, "pinkNose", {
+  // Будет ли свойство перечислимым (появляться в for..in и Object.keys)
+  enumerable: false,
+  configurable: true,
+  // Можно ли свойство изменить
+  writable: true,
+  // Задаём свойство
+  value: 'yes'
+})
+console.log('rabbit.pinkNose', rabbit.pinkNose)
+
+console.log('Object.keys(rabbit)', Object.keys(rabbit))
+for (let prop in rabbit) console.log(prop)
+
+// Если унаследованные свойства нам не нужны, то мы можем отфильтровать их при помощи встроенного метода obj.hasOwnProperty(key): он возвращает true, если у obj есть собственное, не унаследованное, свойство с именем key.
+
+for (let prop in rabbit) {
+  let isOwn = rabbit.hasOwnProperty(prop);
+
+  if (isOwn) {
+    console.log(`Our: ${prop}`); // Our: jumps
+  } else {
+    console.log(`Inherited: ${prop}`); // Inherited: eats
+  }
+}
+
+const Rabbit = (function (this:any, name:string) {
+  this.name = name
+}) as any
+
+/* прототип по умолчанию
+Rabbit.prototype = { constructor: Rabbit }
+*/
+console.log('Rabbit.prototype.constructor == Rabbit', Rabbit.prototype.constructor == Rabbit)
+let sipleRabbit = new Rabbit('simple')
+let newSipleRabbit = new sipleRabbit.constructor('new simple')
+console.log('sipleRabbit.constructor == Rabbit', sipleRabbit.constructor == Rabbit)
+console.log('newSipleRabbit.constructor == Rabbit', newSipleRabbit.constructor == Rabbit)
+console.log('newSipleRabbit', newSipleRabbit)
+
+
+// Устанавливаем для новых созданных объектов прототип animal
+Rabbit.prototype = {
+  ...animal,
+  constructor: Rabbit,
+}
+
+let whiteRabbit = new Rabbit("White Rabbit") //  WhiteRabbit.__proto__ == animal
+console.log('whiteRabbit.constructor == Rabbit', whiteRabbit.constructor == Rabbit)
+
+console.log('whiteRabbit.eats', whiteRabbit.eats) // true
+console.log(whiteRabbit)
+
+// Теперь прототип новых созданных объектов будут базовым объектом js
+Rabbit.prototype = null
+
+let BlackRabbit = new Rabbit("Black Rabbit") //  BlackRabbit.__proto__ == null
+console.log(BlackRabbit)
+
+newSipleRabbit = new BlackRabbit.constructor('new simple')
+console.log(newSipleRabbit)
+console.log(newSipleRabbit.toUpperCase())
+newSipleRabbit = new BlackRabbit.constructor(1)
+console.log(newSipleRabbit)
+
+console.log(obj.__proto__ === Object.prototype); // true
+// obj.toString === obj.__proto__.toString === Object.prototype.toString
+
+arr = [1, 2, 3]
+
+// наследует ли от Array.prototype?
+// @ts-ignore
+console.log('arr.__proto__ === Array.prototype',arr.__proto__ === Array.prototype) // true
+
+// затем наследует ли от Object.prototype?
+// @ts-ignore
+console.log('arr.__proto__.__proto__ === Object.prototype',arr.__proto__.__proto__ === Object.prototype) // true
+
+// и null на вершине иерархии
+// @ts-ignore
+console.log('arr.__proto__.__proto__.__proto__',arr.__proto__.__proto__.__proto__) // null
+
+console.log([1, 2, 3])
+
+// Заимствование у прототипов
+// Это когда мы берём метод из одного объекта и копируем его в другой.
+// Некоторые методы встроенных прототипов часто одалживают.
+
+// Например, если мы создаём объект, похожий на массив(псевдомассив), мы можем скопировать некоторые методы из Array в этот объект.
+
+let newObj = {
+  0: "Hello",
+  1: "world!",
+  length: 2,
+} as any
+console.log({...newObj})
+// newObj.join = Array.prototype.join
+newObj.__proto__ = Array.prototype
+newObj.push('Aaaaaa')
+console.log(newObj.join(',')) // Hello,world!,Aaaaaa
+console.log(newObj)
+
