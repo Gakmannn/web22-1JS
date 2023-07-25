@@ -1844,3 +1844,137 @@ newObj.push('Aaaaaa')
 console.log(newObj.join(',')) // Hello,world!,Aaaaaa
 console.log(newObj)
 
+// Свойство __proto__ считается устаревшим, и по стандарту оно должно поддерживаться только браузерами.
+
+// Современные же методы это:
+
+// Object.create(proto, [descriptors]) – создаёт пустой объект со свойством[[Prototype]], указанным как proto, и необязательными дескрипторами свойств descriptors.
+// Object.getPrototypeOf(obj) – возвращает свойство[[Prototype]] объекта obj.
+// Object.setPrototypeOf(obj, proto) – устанавливает свойство[[Prototype]] объекта obj как proto.
+
+// создаём новый объект с прототипом animal
+let rabbit5 = Object.create(animal);
+
+console.log(rabbit5.eats); // true
+
+console.log(Object.getPrototypeOf(rabbit5) === animal); // получаем прототип объекта rabbit
+
+Object.setPrototypeOf(rabbit5, {}); // заменяем прототип объекта rabbit на {}
+
+// Мы также можем использовать Object.create для «продвинутого» клонирования объекта, более мощного, чем копирование свойств в цикле for..in:
+
+// клон obj c тем же прототипом (с поверхностным копированием свойств)
+let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
+// Такой вызов создаёт точную копию объекта obj, включая все свойства: перечисляемые и неперечисляемые, геттеры / сеттеры для свойств – и всё это с правильным свойством[[Prototype]].
+
+// Синтаксис «class»
+// Базовый синтаксис выглядит так:
+
+class MyClass {
+  prop = value // свойство
+  constructor() { // конструктор
+    // ...
+  }
+  method() { } // метод
+  get something() { return '' } // геттер
+  set something(a:any) { } // сеттер
+  [Symbol.iterator]() { } // метод с вычисляемым именем (здесь - символом)
+  // ...
+}
+
+class ClassUser {
+  // не надо объявлять переменную (let, const)
+  // Значения свойст врисваиваются объекту при вызове new ClassName
+  name
+  #age = 18
+  // При создании нового объекта в первую очередь срабатывает конструктор
+  constructor(name:string) {
+    this.name = name
+  }
+  // геттер срабатывает, когда мы обращаемся к этому свойству
+  // Например, user.age
+  get age() {
+    return this.#age
+  }
+  // cеттер срабатывает, когда мы устанавливаем это свойству
+  // Например, user.age = 18
+  set age(age:number) {
+    if (age<0) {
+      alert('невозможно')
+    } else {
+      this.#age = age
+    }
+  }
+  sayHi() {
+    console.log(this.name)
+  }
+}
+
+// Использование:
+user = new ClassUser("Иван")
+user.sayHi()
+console.log(user)
+user.age = 16
+console.log(user)
+console.log('typeof ClassUser', typeof ClassUser)
+
+// Вот что на самом деле делает конструкция class User {... }:
+
+// Создаёт функцию с именем User, которая становится результатом объявления класса.Код функции берётся из метода constructor(она будет пустой, если такого метода нет).
+// Сохраняет все методы, такие как sayHi, в User.prototype.
+// При вызове метода объекта new User он будет взят из прототипа, как описано в главе F.prototype.Таким образом, объекты new User имеют доступ к методам класса.
+
+console.log('ClassUser === ClassUser.prototype.constructor', 
+  ClassUser === ClassUser.prototype.constructor) // true
+
+// Методы находятся в User.prototype, например:
+console.log('ClassUser.prototype.sayHi', ClassUser.prototype.sayHi) // sayHi() { alert(this.name); }
+
+console.log('Object.getOwnPropertyNames(ClassUser.prototype)',
+  Object.getOwnPropertyNames(ClassUser.prototype)) // constructor, sayHi
+
+// Не просто синтаксический сахар
+// Иногда говорят, что class – это просто «синтаксический сахар» в JavaScript(синтаксис для улучшения читаемости кода, но не делающий ничего принципиально нового), потому что мы можем сделать всё то же самое без конструкции class:
+
+// перепишем класс User на чистых функциях
+
+// 1. Создаём функцию constructor
+const FunctionUser = (function (this:any,name:string) {
+  this.name = name
+}) as any
+// каждый прототип функции имеет свойство constructor по умолчанию,
+// поэтому нам нет необходимости его создавать
+
+// 2. Добавляем метод в прототип
+FunctionUser.prototype.sayHi = function () {
+  console.log(this.name)
+}
+
+// Использование:
+user = new FunctionUser("Иван")
+user.sayHi()
+// Результат этого кода очень похож.Поэтому, действительно, есть причины, по которым class можно считать синтаксическим сахаром для определения конструктора вместе с методами прототипа.
+
+// Однако есть важные отличия:
+
+// Во - первых, функция, созданная с помощью class, помечена специальным внутренним свойством[[IsClassConstructor]]: true.Поэтому это не совсем то же самое, что создавать её вручную.
+
+// В отличие от обычных функций, конструктор класса не может быть вызван без new:
+
+class User2 {
+  constructor() { }
+}
+
+console.log(typeof User2); // function \
+//User(); // Error: Class constructor User cannot be invoked without 'new'
+// Кроме того, строковое представление конструктора класса в большинстве движков JavaScript начинается с «class …»
+
+// Методы класса являются неперечислимыми.Определение класса устанавливает флаг enumerable в false для всех методов в "prototype".
+
+// И это хорошо, так как если мы проходимся циклом for..in по объекту, то обычно мы не хотим при этом получать методы класса.
+
+// Классы всегда используют use strict.Весь код внутри класса автоматически находится в строгом режиме.
+
+// Также в дополнение к основной, описанной выше, функциональности, синтаксис class даёт ряд других интересных возможностей, с которыми мы познакомимся чуть позже.
+
+
