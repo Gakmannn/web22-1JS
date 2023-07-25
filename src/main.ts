@@ -1977,4 +1977,54 @@ console.log(typeof User2); // function \
 
 // Также в дополнение к основной, описанной выше, функциональности, синтаксис class даёт ряд других интересных возможностей, с которыми мы познакомимся чуть позже.
 
+const timerArea = document.getElementById('timer')
+const buttonStartTimer = document.getElementById('startTimer')
+const buttonStopTimer = document.getElementById('stopTimer')
 
+class Clock {
+  timer:any
+  template
+  constructor({ template }:any) {
+    this.template = template
+  }
+
+  render() {
+    let date = new Date();
+
+    let hours: (string|number) = date.getHours();
+    if (hours < 10) hours = '0' + hours;
+
+    let mins: (string | number) = date.getMinutes();
+    if (mins < 10) mins = '0' + mins;
+
+    let secs: (string | number) = date.getSeconds();
+    if (secs < 10) secs = '0' + secs;
+
+    let output = this.template
+      .replace('h', hours)
+      .replace('m', mins)
+      .replace('s', secs);
+
+    if (timerArea) timerArea.innerText = output
+  }
+
+  stop() {
+    clearInterval(this.timer);
+  };
+
+  start() {
+    this.render();
+    this.timer = setInterval(() => { this.render() }, 1000);
+  };
+
+}
+
+
+
+let clock = new Clock({ template: 'h:m:s' })
+buttonStartTimer?.addEventListener('click', ()=>{
+  clock.start()
+})
+buttonStopTimer?.addEventListener('click', ()=>{
+  clock.stop()
+})
