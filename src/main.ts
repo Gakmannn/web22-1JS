@@ -2019,8 +2019,6 @@ class Clock {
 
 }
 
-
-
 let clock = new Clock({ template: 'h:m:s' })
 buttonStartTimer?.addEventListener('click', ()=>{
   clock.start()
@@ -2028,3 +2026,133 @@ buttonStartTimer?.addEventListener('click', ()=>{
 buttonStopTimer?.addEventListener('click', ()=>{
   clock.stop()
 })
+
+// Реализовать класс, описывающий html элемент.
+// Класс HtmlElement должен содержать внутри себя:
+// ■ название тега;
+// ■ самозакрывающийся тег или нет;
+// ■ текстовое содержимое;
+// ■ массив атрибутов;
+// ■ массив стилей;
+// ■ массив вложенных таких же тегов;
+// ■ метод для установки атрибута;
+// ■ метод для установки стиля;
+// ■ метод для добавления вложенного элемента в конец текущего элемента;
+// ■ метод для добавления вложенного элемента в начало текущего элемента;
+// ■ метод getHtml(), который возвращает html код в виде
+// строки, включая html код вложенных элементов.
+
+class HtmlElement {
+  tag: string
+  static singleTags = ['area', 'base', 'basefont', 'bgsound', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'isindex', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr']
+  text: string
+  atributes: string[] = []
+  styles: string[] = []
+  classes: string[] = []
+  elements: HtmlElement[] = []
+  constructor(tag: string, text: string) {
+    this.tag = tag
+    this.text = text
+  }
+  addAtribute(atribute: string) {
+    this.atributes.push(atribute)
+  }
+  addClass(cls: string) {
+    this.classes.push(cls)
+  }
+  addStyle(style: string) {
+    this.styles.push(style)
+  }
+  unshiftElement(el: HtmlElement) {
+    if (HtmlElement.singleTags.includes(this.tag)) return false
+    this.elements.unshift(el)
+  }
+  pushElement(el: HtmlElement) {
+    if (HtmlElement.singleTags.includes(this.tag)) return false
+    this.elements.push(el)
+  }
+  getHtml(): string {
+    if (HtmlElement.singleTags.includes(this.tag)) {
+      return `<${this.tag} ${this.atributes.join(' ')} class="${this.classes.join(' ')}" style="${this.styles.join(';')}" value="${this.text}">`
+    }
+    const begin = `<${this.tag} ${this.atributes.join(' ')} class="${this.classes.join(' ')}" style="${this.styles.join(';')}">${this.text}`
+    const end = `</${this.tag}>`
+    return begin + this.elements.map(el => el.getHtml()).join('') + end
+  }
+}
+
+const divElement = new HtmlElement('div', 'some text')
+
+divElement.addAtribute('id="generatedP"')
+divElement.addStyle('color:green')
+divElement.addStyle('font-size:18px')
+divElement.addStyle('padding:10px')
+divElement.addClass('myNewClass')
+
+const imgElement = new HtmlElement('img', '')
+imgElement.addAtribute('src="https://eduard0606.github.io/Portfolio/assets/SQsFQIo7NTM-aa1b387f.jpg"')
+imgElement.addStyle('width:100px')
+
+const aElement = new HtmlElement('a', 'portfolio')
+aElement.addAtribute('href="https://eduard0606.github.io/Portfolio/"')
+aElement.addAtribute('target="_blank"')
+
+const olElement = new HtmlElement('ol', '')
+const liElement = new HtmlElement('li', 'string')
+
+olElement.pushElement(liElement)
+olElement.pushElement(liElement)
+olElement.pushElement(liElement)
+olElement.pushElement(liElement)
+
+divElement.pushElement(aElement)
+divElement.unshiftElement(new HtmlElement('button', "i'm not work"))
+divElement.pushElement(imgElement)
+divElement.pushElement(olElement)
+
+const pElement = new HtmlElement('p', 'hello')
+
+console.log(divElement)
+
+const renderDiv = document.getElementById('app')
+if (renderDiv) renderDiv.innerHTML = divElement.getHtml()
+if (renderDiv) renderDiv.innerHTML += pElement.getHtml()
+
+
+// Примеры функций
+// function f1(параметры) {код}
+// Если внутри блока кода нет return, он всё равно срабатывает, но возвращает undefined
+function f1() {}
+const f2 = function () {}
+const f3 = () => {}
+// Вызов функций
+f1() //undefined
+f2() //undefined
+f3() //undefined
+
+// Примеры функций-конструкторов
+// имя функций-конструктора пишется с большой буквы
+// function Fс1(параметры) {
+//  ?в начале исполнения функции-конструктора создаётся пустой объект и присваивается в this
+//  this = {}
+//  ?в коде мы присваиваем значения принятые через параметры к this
+//  this.name = name
+//  ?здесь же можем создавать методы
+//  this.sayHi() {alert(this.name)}
+// }
+// Если внутри блока не нужен return, Фукнкция конструктор вызывается при помощи ключевого слова new и всегда возвращает объект 
+function Fc1() { }
+const Fc2 = (function(this:any, name:string) { 
+  this.name = name
+}) as any
+
+
+// Вызов функций-конструкторов
+// @ts-ignore
+const fc1Object = new Fc1() // {}
+const fc2Object = new Fc2('Vasilij') // {name:Vasilij}
+const fc2Object2 = new Fc2('Teddy') // {name:Teddy}
+// не имеет смысла добавлять свойства объектам созданным при помощи функции-конструктора, вне её, т.к. смысл функции-конструктора в том, чтобы создавать однотипные объекты более простым путём
+fc2Object.age = 20
+// Если вызвать функцию-конструктор без ключевого слова new, она вернёт undefined
+console.log(Fc2()) // undefined
