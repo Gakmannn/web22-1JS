@@ -1525,8 +1525,8 @@ console.log(fib(77)) // 5527939700884757
 console.log(recursiveFib2(3))
 console.log(recursiveFib(77))
 
-const click1Btn = document.querySelector('.click1')
-const click2Btn = document.querySelector('.click2')
+const click1Btn = document.querySelector('.click1') as HTMLButtonElement
+const click2Btn = document.querySelector('.click2') as HTMLButtonElement
 
 function cachedClicker() {
   let memory = 0
@@ -1926,6 +1926,7 @@ class ClassUser {
 user = new ClassUser("Иван")
 user.sayHi()
 console.log(user)
+user.age
 user.age = 16
 console.log(user)
 console.log('typeof ClassUser', typeof ClassUser)
@@ -2031,7 +2032,19 @@ class Clock {
 
 }
 
-let clock = new Clock({ template: 'h:m:s' })
+class ExtendedClock extends Clock {
+  precision: number
+  constructor({ template }: any, precision = 1000) {
+    super({ template })
+    this.precision = precision
+  }
+  start() {
+    super.render()
+    this.timer = setInterval(() => { this.render() }, this.precision);
+  }
+}
+
+let clock = new ExtendedClock({ template: 'h:m:s' },2000)
 buttonStartTimer?.addEventListener('click', ()=>{
   clock.start()
 })
@@ -2157,7 +2170,7 @@ function Fc1() { }
 const Fc2 = (function(this:any, name:string) { 
   this.name = name
   Object.defineProperties(this, {
-    name: { value: "John", writable: false },
+    name: { value: "John", writable: true },
     surname: { value: "Smith", writable: false },
     age: { value: 21, writable: true },
     // ...
@@ -2292,13 +2305,13 @@ Object.defineProperty(user, "name", {
 //   // ...
 // });
 
-Например:
-Object.defineProperties(user, {
-  name: { value: "John", writable: false },
-  surname: { value: "Smith", writable: false },
-  age: { value: "Smith", writable: true },
-  // ...
-})
+// Например:
+// Object.defineProperties(user, {
+//   name: { value: "John", writable: false },
+//   surname: { value: "Smith", writable: false },
+//   age: { value: "Smith", writable: true },
+//   // ...
+// })
 
 // Таким образом, мы можем определить множество свойств одной операцией.
 
@@ -2508,3 +2521,57 @@ Date.now()
 // Семантически он эквивалентен new Date().getTime(), однако метод не создаёт промежуточный объект Date.Так что этот способ работает быстрее и не нагружает сборщик мусора.
 
 // Данный метод используется из соображений удобства или когда важно быстродействие, например, при разработке игр на JavaScript или других специализированных приложений.
+
+console.log('window.innerHeight', window.innerHeight) // внутренняя высота окна браузера
+console.log('window.innerWidth', window.innerWidth) // внутренняя ширина окна браузера
+console.log('document (DOM)', document)
+
+enum accountType { debet, credit }
+
+class Account {
+  static balance = 1_000_000
+  static num = 0
+  name:string
+  amount:number
+  type: accountType
+  constructor(name: string, amount: number, type: accountType) {
+    this.name = name
+    this.amount = amount
+    this.type = type
+    Account.num++
+    if (type == 0) {
+      Account.balance+=amount
+    } else if (type == 1) {
+      Account.balance-=amount
+    }
+  }
+}
+
+console.log(Account.balance, Account.num)
+new Account('Vasia', 1_000, 0)
+console.log(Account.balance, Account.num)
+new Account('Petia', 1_000, 1)
+console.log(Account.balance, Account.num)
+new Account('Nata', 500, 1)
+console.log(Account.balance, Account.num)
+
+const allInputs = document.querySelectorAll('input') as Record<number, HTMLInputElement>
+const widthInput = document.querySelector('#width') as HTMLInputElement
+if (widthInput) {
+  console.log(allInputs[0].value)
+  console.log(widthInput.constructor.name)
+  console.log(widthInput.nodeName)
+  console.log(widthInput.tagName)
+  widthInput.value = '10'
+  console.dir(widthInput)
+}
+
+// Все атрибуты доступны с помощью следующих методов:
+
+// elem.hasAttribute(name) – проверяет наличие атрибута.
+// elem.getAttribute(name) – получает значение атрибута.
+// elem.setAttribute(name, value) – устанавливает значение атрибута.
+// elem.removeAttribute(name) – удаляет атрибут.
+// Эти методы работают именно с тем, что написано в HTML.
+
+// Кроме этого, получить все атрибуты элемента можно с помощью свойства elem.attributes

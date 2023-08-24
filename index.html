@@ -51,6 +51,7 @@
     </div>
     <script type="module" src="/src/main.ts"></script>
     <script>
+      // console.log(save)
       const width = document.querySelector('#width')
       const height = document.querySelector('#height')
       const save = document.querySelector('#save')
@@ -73,6 +74,11 @@
       })
       console.log(JSON.parse(localStorage.obj))
 
+      function sayHiWindow() {
+        alert('hi')
+      }
+
+      // window.sayHiWindow()
     </script>
   </body>
 </html>
