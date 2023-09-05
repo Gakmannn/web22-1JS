@@ -14,12 +14,22 @@
         display: block;
         width: 200px;
         border-radius: 10px;
-        background-color: burlywood;
+        background-color: rgb(220, 220, 220);
         border: 1px solid black;
         text-align: center;
         padding: 10px;
         margin: 20px auto;
         text-decoration: none;
+      }
+      th {
+        width: 100px;
+        background-color: rgb(217, 217, 217);
+      }
+      tr:nth-child(odd) td {
+        background-color: rgb(195, 169, 169);
+      }
+      tr:nth-child(even) td {
+        background-color: rgb(139, 170, 176);
       }
     </style>
   </head>
@@ -28,6 +38,22 @@
       <a href="https://disk.yandex.ru/d/KwdXQropyuL3Iw" target="_blank">Материалы и домашка!!!</a>
       <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math" target="_blank">Объект Math</a>
       <a href="https://disk.yandex.ru/d/QopOmys6bIQbrA" target="_blank">Курс JS</a>
+      <table>
+        <thead>
+          <tr>
+            <th data-name="Имя" data-prop="name">Имя</th>
+            <th data-name="Фамилия" data-prop="surname">Фамилия</th>
+            <th data-name="Оценка" data-prop="ball">Оценка</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div id="dinamicList">
+        <input type="text" placeholder="Введите новый пункт списка и нажмите Enter">
+        <button>Добавить элемент</button>
+        <ul></ul>
+      </div>
       <h3 id="timer"></h3>
       <button id="startTimer">start Timer</button>
       <button id="stopTimer">stop Timer</button>

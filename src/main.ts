@@ -2612,3 +2612,138 @@ let div = document.createElement('div')
 // ?Чтобы добавить HTML на страницу до завершения её загрузки:
 // !document.write(html)
 // !После загрузки страницы такой вызов затирает документ.В основном встречается в старых скриптах.
+
+// !Создайте список
+// Напишите интерфейс для создания списка.
+
+// Для каждого пункта:
+
+// Запрашивайте содержимое пункта у пользователя с помощью prompt.
+// Создавайте элемент < li > и добавляйте его к <ul>.
+// Продолжайте до тех пор, пока пользователь не отменит ввод(нажатием клавиши Esc или введя пустую строку).
+// Все элементы должны создаваться динамически.
+
+// !Если пользователь вводит HTML - теги, они должны обрабатываться как текст.
+
+const dinamicList = document.getElementById('dinamicList')
+const listInput = dinamicList?.querySelector('input') 
+const listButton = dinamicList?.querySelector('button')
+const listUl = dinamicList?.querySelector('ul')
+
+function addElementToList() {
+  if (listInput?.value) {
+    const li = document.createElement('li')
+    li.textContent = listInput?.value
+    listUl?.append(li)
+    listInput.value = ''
+  }
+}
+
+listButton?.addEventListener('click', addElementToList)
+listInput?.addEventListener('keypress', (event)=>{
+  if (event.key == 'Enter') {
+    addElementToList()
+  }
+})
+
+// Создайте дерево из объекта
+// Напишите функцию createTree, которая создаёт вложенный список ul / li из объекта.
+
+let data = {
+  "Рыбы": {
+    "форель": {},
+    "лосось": {}
+  },
+  "Деревья": {
+    "Огромные": {
+      "секвойя": {},
+      "дуб": {}
+    },
+    "Цветковые": {
+      "яблоня": {
+        мелкая: {},
+        крупная: {}
+      },
+      "магнолия": {}
+    }
+  }
+}
+
+function recursiveCountElements(obj:any, inner:boolean):number {
+  const entries = Object.entries(obj)
+  if (entries.length && inner) {
+    return 1 + entries.reduce((acc, el) => acc + recursiveCountElements(el[1], true), 0)
+  } else if (entries.length) {
+    return entries.reduce((acc, el) => acc + recursiveCountElements(el[1], true), 0)
+  } else {
+    return 1
+  }
+}
+
+function recursiveGetElement(key: string, value: any): string {
+  if (Object.keys(value).length) {
+    return `<li>${key} [ ${recursiveCountElements(value, false) } ]
+      <ul>
+        ${Object.entries(value).map(el => recursiveGetElement(el[0], el[1])).join('')}
+      </ul>
+    </li>`
+  } else {
+    return `<li>${key}</li>`
+  }
+}
+
+function renderList(data: any) {
+  if (listUl)
+  listUl.innerHTML = Object.entries(data).map(el => recursiveGetElement(el[0], el[1])).join('')
+}
+renderList(data)
+
+const group = [
+  {name:'sfgsfsd',surname:'rdfggdet',ball:10},
+  {name:'tsfgsfsd',surname:'qdfggdet',ball:1},
+  {name:'usfgsfsd',surname:'dfggdet',ball:12},
+  {name:'wsfgsfsd',surname:'bdfggdet',ball:8},
+  {name:'vsfgsfsd',surname:'mdfggdet',ball:6},
+  {name:'msfgsfsd',surname:'ldfggdet',ball:4},
+] as any[]
+
+const tbody = document.querySelector('tbody')
+
+function renderTable() {
+  if(tbody) {
+    tbody.innerHTML = ''
+    group.forEach(el => tbody.insertAdjacentHTML('beforeend',
+    `<tr>
+      <td>${el.name}</td>
+      <td>${el.surname}</td>
+      <td>${el.ball}</td>
+    </tr>`))
+  }
+}
+
+const th = document.querySelectorAll('th')
+
+th.forEach(el=>el.addEventListener('click', (e)=>{
+  const target = e.target as HTMLTableCellElement 
+  // console.log(target?.dataset.name)
+  if (target.textContent == target?.dataset.name) {
+    // @ts-ignore
+    th.forEach(el => el.textContent = el.dataset.name)
+    target.textContent = target.dataset.name + ' ▼'
+    if (target.dataset.prop != 'ball') {
+      // сортировка по строкам
+      const prop = target.dataset.prop as string
+      group.sort((a, b) => a[prop].localeCompare(b[prop]))
+    } else {
+      // сортировка по числам
+      group.sort((a,b)=>a.ball-b.ball)
+    }
+  } else {
+    const sortOrder = target.textContent?.includes('▼') ? ' ▲' : ' ▼'
+    target.textContent = target?.dataset.name + sortOrder
+    group.reverse()
+  }
+  renderTable()
+}))
+
+renderTable()
