@@ -2791,3 +2791,16 @@ let scrollHeight = Math.max(
 // Координаты в контексте окна подходят для использования с position: fixed, а координаты относительно документа – для использования с position: absolute.
 
 // Каждая из систем координат имеет свои преимущества и недостатки.Иногда будет лучше применить одну, а иногда – другую, как это и происходит с позиционированием в CSS, где мы выбираем между absolute и fixed.
+const once = true
+const options = {
+  passive: true, 
+  once // once:once
+}
+const btn = document.querySelector('button')
+btn?.addEventListener('click', function (event) {
+  console.log('this', this)
+  console.log('event.currentTarget',event.currentTarget)
+  console.log(event.type + " на " + event.currentTarget);
+  console.log("Координаты: " + event.clientX + ":" + event.clientY);
+  console.log('event',event)
+}, options)
