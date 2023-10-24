@@ -3067,3 +3067,34 @@ let arr1 = [f(), f(), f()];
 // !Каррирование – это трансформация, которая превращает вызов f(a, b, c) в f(a)(b)(c).В JavaScript реализация обычно позволяет вызывать функцию обоими вариантами: либо нормально, либо возвращает частично применённую функцию, если количество аргументов недостаточно.
 
 // ?Каррирование позволяет легко получать частичные функции.Как мы видели в примерах с логами: универсальная функция log(date, importance, message) после каррирования возвращает нам частично применённую функцию, когда вызывается с одним аргументом, как log(date) или двумя аргументами, как log(date, importance)
+
+// !Intersection Observer
+// ?https://doka.guide/js/intersection-observer/
+
+const observerOptions = {
+  // root: ,
+  rootMargin: '0px',
+  threshold: [0, 0.5, 1],
+}
+
+const callback = (entries: IntersectionObserverEntry[]) => {
+  entries.forEach(({ isIntersecting, intersectionRatio }) => {
+    if (isIntersecting) {
+      if (intersectionRatio >= 0 && intersectionRatio < 0.45) {
+        console.log('Элемент появился в области наблюдения')
+      }
+
+      if (intersectionRatio >= 0.45 && intersectionRatio < 0.75) {
+        console.log('Элемент наполовину в области наблюдения')
+      }
+
+      if (intersectionRatio === 1) {
+        console.log('Элемент полностью в области наблюдения')
+      }
+    }
+  })
+}
+
+const observer = new IntersectionObserver(callback, observerOptions)
+
+observer.observe((renderDiv as HTMLDivElement))
